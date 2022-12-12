@@ -9,6 +9,7 @@ const readline = require('readline');
 */
 
 let partOneSolution = -1;
+let partTwoSolution = -1;
 
 (async function processLineByLine() {
   try {
@@ -27,10 +28,19 @@ let partOneSolution = -1;
           break;
         }
       }
+      for (let i=0; i<line.length-14; i++){
+        let testPacket = line.substring(i,i+14);
+        const testSet = new Set(testPacket);
+        if (testSet.size === 14) {
+          partTwoSolution = i+14;
+          break;
+        }
+      }
     });
 
     await events.once(rl, 'close');
     console.log(`Solution for part one: ${partOneSolution}`);
+    console.log(`Solution for part Two: ${partTwoSolution}`);
 
 
   } catch (err) {
