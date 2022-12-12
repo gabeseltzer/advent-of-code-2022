@@ -7,8 +7,14 @@ const numberOfStacksRegEx = /(\d) +$/g;
 const movementRegEx = /move (\d+) from (\d+) to (\d+)/;
 const rows = [];
 let stacksPartOne = [];
+let stacksPartTwo = [];
 let columns = 0;
 
+/* 
+  Note: I added an extra space at the end of the input lines
+  for the stacks to make parsing easier
+  I also removed a blank line between the stack inputs and the movement inputs
+*/
 
 (async function processLineByLine() {
   try {
@@ -41,16 +47,28 @@ let columns = 0;
           const movingCrate = stacksPartOne[sourceColumn-1].pop();
           stacksPartOne[destColumn-1].push(movingCrate);
         }
+        const stackLength = stacksPartTwo[sourceColumn-1].length;
+        const movingCrates = stacksPartTwo[sourceColumn-1].splice(stackLength-(numberOfMoves));
+        stacksPartTwo[destColumn-1].push(...movingCrates);
       }
     });
 
     await events.once(rl, 'close');
+    console.log("Final stacks for part one: ")
     console.log(stacksPartOne);
     let solution = '';
     stacksPartOne.forEach((stack) => {
       solution += stack[stack.length-1];
     });
-    console.log(solution);
+    console.log(`Solution for part one: ${solution}`);
+    console.log("Final stacks for part Two: ")
+    console.log(stacksPartTwo);
+    solution = '';
+    stacksPartTwo.forEach((stack) => {
+      solution += stack[stack.length-1];
+    });
+    console.log(`Solution for part two: ${solution}`);
+
 
   } catch (err) {
     console.error(err);
@@ -67,5 +85,6 @@ function formStacks() {
       };
     });
   }
+  stacksPartTwo = JSON.parse(JSON.stringify(stacksPartOne));
 
 }
